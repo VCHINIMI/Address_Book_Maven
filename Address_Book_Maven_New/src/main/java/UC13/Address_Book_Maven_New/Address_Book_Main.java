@@ -1,5 +1,6 @@
 package UC13.Address_Book_Maven_New;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,6 +16,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+
+import org.apache.commons.text.RandomStringGenerator;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -448,4 +460,36 @@ public class Address_Book_Main {
         }
         return contactsFromCsv;
 	}
+	
+	public void writeToJson(Contact contact) throws Exception {
+		Gson gson = new Gson();
+		String contactJsonString = gson.toJson(contact);
+		FileWriter writer = new FileWriter("contactJson.json");
+		writer.write(contactJsonString);
+		writer.close();
+	}
+	
+	public void readFromJson() throws FileNotFoundException, IOException {
+		JsonParser jsonParser = new JsonParser();
+		try(FileReader fileReader = new FileReader("contactJson.json"))
+		{
+			Object object = jsonParser.parse(fileReader);
+			JSONArray employeeArray = (JSONArray) object;
+			
+		}
+	}
+	
+	public Contact parseContact(JSONObject contact) throws JSONException {
+		Contact tempContact = new Contact();
+		tempContact.setF_Name((String) contact.get("f_name"));
+		tempContact.setL_Name((String) contact.get("l_name"));
+		tempContact.setAddress((String) contact.get("address"));
+		tempContact.setCity((String) contact.get("city"));
+		tempContact.setState((String) contact.get("state"));
+		tempContact.setZip( contact.getInt("zip"));
+		tempContact.setPhone_Number(contact.getInt("phone_Number"));
+		tempContact.setEmail((String) contact.get("email"));
+		return tempContact;
+	}
+
 }

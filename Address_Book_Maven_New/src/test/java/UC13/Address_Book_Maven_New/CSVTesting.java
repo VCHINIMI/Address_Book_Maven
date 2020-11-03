@@ -30,4 +30,9 @@ public class CSVTesting {
 		assertEquals(contactList.get(1), new Contact("Vinay", "ch", "55", "vskp", "AP", 5330, 99122, "vina.ch@gmail"));
 
 	}
+	@Test
+	public void test() {
+		Address_Book_Main address_Book_Main = new Address_Book_Main();
+//	address_Book_Main.writeToJson()new Contact("Vinay", "ch", "55", "vskp", "AP", 5330, 99122, "vina.ch@gmail");
+	}
 }
