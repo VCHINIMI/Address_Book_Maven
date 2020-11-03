@@ -34,6 +34,22 @@ public class AddressBookDBTest {
 	public void givenDates_ShouldReturnContacts() throws AddressBookException {
 		AddressBookService addressBookService = new AddressBookService();
 		List<Contact> contactList = addressBookService.getContactsBetweenDates(LocalDate.of(2015, 1, 1),LocalDate.of(2020, 1, 1) );
-		assertEquals(contactList.size(), 9);
+		assertEquals(contactList.size(), 5);
+	}
+	
+//  Search by City
+	@Test
+	public void searchByCity_ShouldReturnContact() throws AddressBookException {
+		AddressBookService addressBookService = new AddressBookService();
+		List<Contact> contactList = addressBookService.getContactsByCity("VSKP");
+		assertEquals(contactList.size(), 1);
+	}
+	
+//	 Search By State
+	@Test
+	public void searchByState_ShouldReturnContact() throws AddressBookException {
+		AddressBookService addressBookService = new AddressBookService();
+		List<Contact> contactList = addressBookService.getContactsByState("AP");
+		assertEquals(contactList.size(), 1);
 	}
 }
