@@ -1,14 +1,32 @@
 package UC13.Address_Book_Maven_New;
 
 public class Contact {
-	String f_Name;
-	String l_Name;
-	String address;
-	String city;
-	String state;
-	int zip;
-	int phone_Number;
-	String email;
+	public int id;
+	public String f_Name;
+	public String l_Name;
+	public String address;
+	public String city;
+	public String state;
+	public int zip;
+	public int phone_Number;
+	public String email;
+	public String bookName;
+	public String bookType;
+
+	public Contact(int id, String f_Name, String l_Name, String address, String city, String state, int zip, int phone_Number,
+			String email, String bookName, String bookType) {
+		this.id = id;
+		this.f_Name = f_Name;
+		this.l_Name = l_Name;
+		this.address = address;
+		this.city = city;
+		this.state = state;
+		this.zip = zip;
+		this.phone_Number = phone_Number;
+		this.email = email;
+		this.bookName = bookName;
+		this.bookType = bookType;
+	}
 
 	public Contact() {
 
