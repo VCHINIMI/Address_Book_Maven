@@ -1,5 +1,6 @@
 package UC13.Address_Book_Maven_New;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class AddressBookService {
@@ -40,5 +41,10 @@ public class AddressBookService {
 	public boolean checkAddressBookInSyncWithDB(String fname) throws AddressBookException {
 		List<Contact> addressBookDataList = addressBookDBService.getAddressBookData(fname);
 		return addressBookDataList.get(0).equals(this.getAddressBookData(fname));
+	}
+	
+	public List<Contact> getContactsBetweenDates(LocalDate start, LocalDate end) throws AddressBookException {
+		List<Contact> contactBetweenDateList = addressBookDBService.getContactsBetweenDates(start,end);
+		return contactBetweenDateList;
 	}
 }

@@ -1,9 +1,11 @@
 package UC13.Address_Book_Maven_New;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -148,6 +150,17 @@ public class AddressBookDBService {
 		} catch (SQLException e) {
 			throw new AddressBookException(e.getMessage(), AddressBookException.ExceptionType.CONNECTION_FAULT);
 		}		
+	}
+
+	public List<Contact> getContactsBetweenDates(LocalDate start, LocalDate end) throws AddressBookException {
+		String sql = "select ab.id,ab.fname,ab.lname,a.address,a.city,a.state,a.zipcode," + "ab.phone,ab.email, "
+				+ "bn.bookname , bt.booktype from address_book_table_1 "
+				+ "ab INNER JOIN address_table_1 a ON ab.id = a.contactId"
+				+ " INNER JOIN book_name_table_1 bn ON ab.id = bn.contact_id"
+				+ " INNER JOIN book_type_table_1 bt ON ab.id = bt.contact_id"
+				+ " WHERE ab.date_added BETWEEN '%s' AND '%s' ;";
+		String sql2 = String.format(sql, Date.valueOf(start),Date.valueOf(end));
+		return getDataFromDatabaseBySQL(sql2);
 	}
 
 }
