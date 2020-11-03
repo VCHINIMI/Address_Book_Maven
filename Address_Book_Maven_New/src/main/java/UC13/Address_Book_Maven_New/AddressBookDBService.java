@@ -80,10 +80,10 @@ public class AddressBookDBService {
 			throw new AddressBookException(e.getMessage(), AddressBookException.ExceptionType.SQL_FAULT);
 		}
 	}
-	
+
 //	Updating contact data on DB
 	public int updateContactData(String fname, int phone) throws AddressBookException {
-		return this.updateEmployeeDetailsUsingStatement(fname, phone);		
+		return this.updateEmployeeDetailsUsingStatement(fname, phone);
 	}
 
 	private int updateEmployeeDetailsUsingStatement(String fname, int phone) throws AddressBookException {
@@ -127,7 +127,8 @@ public class AddressBookDBService {
 				String email = resultSet.getString("email");
 				String bookName = resultSet.getString("bookname");
 				String bookType = resultSet.getString("booktype");
-				addressBookList.add(new Contact(id, fname, lname, address, city, state, zip, phone, email, bookName, bookType));
+				addressBookList.add(
+						new Contact(id, fname, lname, address, city, state, zip, phone, email, bookName, bookType));
 			}
 		} catch (SQLException e) {
 			throw new AddressBookException(e.getMessage(), AddressBookException.ExceptionType.CONNECTION_FAULT);
@@ -139,17 +140,16 @@ public class AddressBookDBService {
 		try {
 			Connection connection = this.getConnection();
 			String sql = "select ab.id,ab.fname,ab.lname,a.address,a.city,a.state,a.zipcode,"
-						+ "ab.phone,ab.email, bn.bookname , bt.booktype from address_book_table_1 ab"
-						+ " INNER JOIN address_table_1 a ON ab.id = a.contactId"
-						+ " INNER JOIN book_name_table_1 bn ON ab.id = bn.contact_id"
-						+ " INNER JOIN book_type_table_1 bt ON ab.id = bt.contact_id"
-						+ " WHERE ab.fname = ?";
+					+ "ab.phone,ab.email, bn.bookname , bt.booktype from address_book_table_1 ab"
+					+ " INNER JOIN address_table_1 a ON ab.id = a.contactId"
+					+ " INNER JOIN book_name_table_1 bn ON ab.id = bn.contact_id"
+					+ " INNER JOIN book_type_table_1 bt ON ab.id = bt.contact_id" + " WHERE ab.fname = ?";
 			addressBookDataStatement = connection.prepareStatement(sql);
 		} catch (AddressBookException e) {
 			throw new AddressBookException(e.getMessage(), e.type);
 		} catch (SQLException e) {
 			throw new AddressBookException(e.getMessage(), AddressBookException.ExceptionType.CONNECTION_FAULT);
-		}		
+		}
 	}
 
 	public List<Contact> getContactsBetweenDates(LocalDate start, LocalDate end) throws AddressBookException {
@@ -159,8 +159,28 @@ public class AddressBookDBService {
 				+ " INNER JOIN book_name_table_1 bn ON ab.id = bn.contact_id"
 				+ " INNER JOIN book_type_table_1 bt ON ab.id = bt.contact_id"
 				+ " WHERE ab.date_added BETWEEN '%s' AND '%s' ;";
-		String sql2 = String.format(sql, Date.valueOf(start),Date.valueOf(end));
+		String sql2 = String.format(sql, Date.valueOf(start), Date.valueOf(end));
 		return getDataFromDatabaseBySQL(sql2);
 	}
 
+	public List<Contact> getContactsByCity(String city) throws AddressBookException {
+		String sql = "select ab.id,ab.fname,ab.lname,a.address,a.city,a.state,a.zipcode," + "ab.phone,ab.email, "
+				+ "bn.bookname , bt.booktype from address_book_table_1 "
+				+ "ab INNER JOIN address_table_1 a ON ab.id = a.contactId"
+				+ " INNER JOIN book_name_table_1 bn ON ab.id = bn.contact_id"
+				+ " INNER JOIN book_type_table_1 bt ON ab.id = bt.contact_id" + " WHERE a.city = '%s';";
+		String sql2 = String.format(sql, city);
+		return getDataFromDatabaseBySQL(sql2);
+	}
+
+	public List<Contact> getContactsByState(String state) throws AddressBookException {
+		String sql = "select ab.id,ab.fname,ab.lname,a.address,a.city,a.state,a.zipcode," + "ab.phone,ab.email, "
+				+ "bn.bookname , bt.booktype from address_book_table_1 "
+				+ "ab INNER JOIN address_table_1 a ON ab.id = a.contactId"
+				+ " INNER JOIN book_name_table_1 bn ON ab.id = bn.contact_id"
+				+ " INNER JOIN book_type_table_1 bt ON ab.id = bt.contact_id" + " WHERE a.state = '%s';";
+		String sql2 = String.format(sql, state);
+		return getDataFromDatabaseBySQL(sql2);
+	}
 }
+

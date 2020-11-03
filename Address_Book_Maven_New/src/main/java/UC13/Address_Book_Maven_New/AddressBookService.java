@@ -47,4 +47,14 @@ public class AddressBookService {
 		List<Contact> contactBetweenDateList = addressBookDBService.getContactsBetweenDates(start,end);
 		return contactBetweenDateList;
 	}
+
+	public List<Contact> getContactsByCity(String city) throws AddressBookException {
+		List<Contact> contactInCityList = addressBookDBService.getContactsByCity(city);
+		return contactInCityList;
+	}
+
+	public List<Contact> getContactsByState(String state) throws AddressBookException {
+		List<Contact> contactInStateList = addressBookDBService.getContactsByState(state);
+		return contactInStateList;
+	}
 }
