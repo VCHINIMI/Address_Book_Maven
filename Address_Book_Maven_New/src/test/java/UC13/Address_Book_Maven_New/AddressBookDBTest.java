@@ -1,6 +1,10 @@
 package UC13.Address_Book_Maven_New;
 
 import static org.junit.Assert.*;
+
+import java.sql.Date;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import org.junit.Test;
 import UC13.Address_Book_Maven_New.AddressBookService.IOService;
@@ -23,5 +27,13 @@ public class AddressBookDBTest {
 		addressBookService.updateContactPhone("akuvakka", 12345);
 		boolean result = addressBookService.checkAddressBookInSyncWithDB("akuvakka");
 		assertTrue(result);
+	}
+	
+//  Retrieve contacts added between dates
+	@Test
+	public void givenDates_ShouldReturnContacts() throws AddressBookException {
+		AddressBookService addressBookService = new AddressBookService();
+		List<Contact> contactList = addressBookService.getContactsBetweenDates(LocalDate.of(2015, 1, 1),LocalDate.of(2020, 1, 1) );
+		assertEquals(contactList.size(), 9);
 	}
 }
