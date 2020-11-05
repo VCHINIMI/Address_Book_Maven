@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class AddressBookDBService {
 
 	private static AddressBookDBService addressBookDBService;
@@ -181,6 +182,99 @@ public class AddressBookDBService {
 				+ " INNER JOIN book_type_table_1 bt ON ab.id = bt.contact_id" + " WHERE a.state = '%s';";
 		String sql2 = String.format(sql, state);
 		return getDataFromDatabaseBySQL(sql2);
+	}
+
+	public Contact addNewContact(String f_Name, String l_Name, String address, String city, String state, int zip,
+			int phone_Number, String email, String bookName, String bookType, LocalDate date) throws AddressBookException {
+		int contactId = -1;
+		Connection connection = null ;
+		Contact contact = null ;
+		try {
+			connection = this.getConnection();
+			try {
+				connection.setAutoCommit(false);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch(AddressBookException e) {
+			throw new AddressBookException(e.getMessage(), AddressBookException.ExceptionType.SQL_FAULT);
+		}
+		
+		try(java.sql.Statement statement = connection.createStatement()) {
+			String sql = String.format("INSERT INTO address_book_table_1(fname,lname,phone,email,date_added) VALUES ('%s','%s',%s,'%s','%s')",f_Name,l_Name,phone_Number,email,Date.valueOf(date));
+			int rowAffected = statement.executeUpdate(sql,statement.RETURN_GENERATED_KEYS);
+			if(rowAffected == 1) {
+				ResultSet resultSet = statement.getGeneratedKeys();
+				if(resultSet.next()) contactId = resultSet.getInt(1);
+			}
+		}  catch (SQLException e) {
+			try {
+				connection.rollback();
+				return contact;
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			throw new AddressBookException(e.getMessage(), AddressBookException.ExceptionType.SQL_FAULT);
+		}
+		
+		try(java.sql.Statement statement = connection.createStatement()) {
+			String sql = String.format("INSERT INTO address_table_1 (contactId, address, city, state, zipcode) VALUES (%s,'%s','%s','%s',%s)",contactId,address,city,state,zip);
+			int rowAffected = statement.executeUpdate(sql,statement.RETURN_GENERATED_KEYS);
+		}  catch(SQLException e) {
+			try {
+				connection.rollback();
+				return contact;
+			} catch(SQLException e1) {
+				e1.printStackTrace();
+			}
+			throw new AddressBookException(e.getMessage(), AddressBookException.ExceptionType.SQL_FAULT);
+		}
+		
+		try(java.sql.Statement statement = connection.createStatement()) {
+			String sql = String.format("INSERT INTO bookname_table_1 (contactId, bookname) VALUES (%s,'%s')",contactId,bookName);
+			int rowAffected = statement.executeUpdate(sql,statement.RETURN_GENERATED_KEYS);
+		}  catch(SQLException e) {
+			try {
+				connection.rollback();
+				return contact;
+			} catch(SQLException e1) {
+				e1.printStackTrace();
+			}
+			throw new AddressBookException(e.getMessage(), AddressBookException.ExceptionType.SQL_FAULT);
+		}
+		
+		try(java.sql.Statement statement = connection.createStatement()) {
+			String sql = String.format("INSERT INTO book_type_table_1 (contactId, booktype) VALUES (%s,'%s')",contactId,bookType);
+			int rowAffected = statement.executeUpdate(sql,statement.RETURN_GENERATED_KEYS);
+			if(rowAffected == 1)
+				contact = new Contact(contactId,f_Name,l_Name,address,city,state,zip,phone_Number,email,bookName,bookType,date);
+		}  catch(SQLException e) {
+			try {
+				connection.rollback();
+				return contact;
+			} catch(SQLException e1) {
+				e1.printStackTrace();
+			}
+			throw new AddressBookException(e.getMessage(), AddressBookException.ExceptionType.SQL_FAULT);
+		}
+		
+		try {
+			connection.commit();
+		}	catch(SQLException e) {
+			e.printStackTrace();
+		}	finally {
+			if(connection!=null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return contact;
 	}
 }
 
