@@ -2,8 +2,7 @@ package UC13.Address_Book_Maven_New;
 
 import static org.junit.Assert.*;
 
-import java.sql.Date;
-import java.sql.SQLException;
+import java.awt.dnd.DragGestureEvent;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.Test;
@@ -50,6 +49,17 @@ public class AddressBookDBTest {
 	public void searchByState_ShouldReturnContact() throws AddressBookException {
 		AddressBookService addressBookService = new AddressBookService();
 		List<Contact> contactList = addressBookService.getContactsByState("AP");
-		assertEquals(contactList.size(), 1);
+		assertEquals(contactList.size(), 4);
+	}
+	
+// Add new Contact
+	@Test 
+	public void addNewContactAndCheckInSync() throws AddressBookException {
+		AddressBookService addressBookService = new AddressBookService(); 
+		addressBookService.readAddressBookData(IOService.DB_IO);
+		addressBookService.addNewContactToDB("Vina", "ch", "Dr.no", "Vskp", "AP", 123, 99014,
+				"vchiay", "BOOK3", "FRIEND",LocalDate.now());
+		boolean res = addressBookService.checkAddressBookInSyncWithDB("Vina");
+		assertTrue(res);
 	}
 }
