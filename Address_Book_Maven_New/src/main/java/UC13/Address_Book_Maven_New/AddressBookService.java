@@ -57,4 +57,9 @@ public class AddressBookService {
 		List<Contact> contactInStateList = addressBookDBService.getContactsByState(state);
 		return contactInStateList;
 	}
+
+	public void addNewContactToDB(String f_Name, String l_Name, String address, String city, String state, int zip, int phone_Number,
+			String email, String bookName, String bookType, LocalDate date) throws AddressBookException {
+		addressBookList.add(addressBookDBService.addNewContact(f_Name,l_Name,address,city,state,zip,phone_Number,email,bookName,bookType,date));
+	}
 }
