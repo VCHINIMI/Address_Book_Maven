@@ -1,5 +1,7 @@
 package UC13.Address_Book_Maven_New;
 
+import java.time.LocalDate;
+
 public class Contact {
 	public int id;
 	public String f_Name;
@@ -12,6 +14,7 @@ public class Contact {
 	public String email;
 	public String bookName;
 	public String bookType;
+	public LocalDate date;
 
 	public Contact(int id, String f_Name, String l_Name, String address, String city, String state, int zip, int phone_Number,
 			String email, String bookName, String bookType) {
@@ -26,6 +29,29 @@ public class Contact {
 		this.email = email;
 		this.bookName = bookName;
 		this.bookType = bookType;
+	}
+	
+	public Contact(int id, String f_Name, String l_Name, String address, String city, String state, int zip,
+			int phone_Number, String email, String bookName, String bookType, LocalDate date) {
+		this.id = id;
+		this.f_Name = f_Name;
+		this.l_Name = l_Name;
+		this.address = address;
+		this.city = city;
+		this.state = state;
+		this.zip = zip;
+		this.phone_Number = phone_Number;
+		this.email = email;
+		this.bookName = bookName;
+		this.bookType = bookType;
+		this.date = date;
+	}
+	
+	@Override
+	public String toString() {
+		return  ( id + " " + f_Name +  " " + l_Name + " " + address + " " 
+				+ city + " " + state + " " + zip + " " + phone_Number + " " 
+				+ email + " " + bookName + " " + bookType + " " + date ) ;
 	}
 
 	public Contact() {
@@ -113,13 +139,6 @@ public class Contact {
 		String[] csvContact = { f_Name, l_Name, address, city, state, Integer.toString(zip),
 				Integer.toString(phone_Number), email };
 		return csvContact;
-	}
-
-	@Override
-	public String toString() {
-		return (f_Name + " " + l_Name + " " + address + " " + city + " " + state + " " + zip + " " + phone_Number + " "
-				+ email);
-
 	}
 
 	@Override
