@@ -4,7 +4,7 @@ public class AddressBookException extends Exception{
 	private static final long serialVersionUID = 5659569326670024185L;
 
 	public enum ExceptionType {
-		CONNECTION_FAULT, PATH_FAULT, DATABASE_NOT_EXIST, SQL_FAULT;
+		CONNECTION_FAULT, PATH_FAULT, DATABASE_NOT_EXIST, SQL_FAULT, THREAD_FAULT;
 	}
 
 	ExceptionType type;
