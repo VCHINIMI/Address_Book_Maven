@@ -9,11 +9,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mysql.jdbc.Statement;
-import com.mysql.jdbc.integration.jboss.ExtendedMysqlExceptionSorter;
-
-import UC13.Address_Book_Maven_New.AddressBookException.ExceptionType;
-
 public class AddressBookDBService {
 
 	private static AddressBookDBService addressBookDBService;
@@ -32,7 +27,7 @@ public class AddressBookDBService {
 	}
 
 //	Method for establishing Connection
-	private Connection getConnection() throws AddressBookException {
+	private synchronized Connection getConnection() throws AddressBookException {
 		try {
 			String jdbcURL = "jdbc:mysql://localhost:3306/address_book?useSSL=false";
 			String userName = "root";
@@ -200,10 +195,7 @@ public class AddressBookDBService {
 			connection = this.getConnection();
 			try {
 				connection.setAutoCommit(false);
-			} catch (SQLException e) {
-				// throw new AddressBookException(e.getMessage(),
-				// AddressBookException.ExceptionType.CONNECTION_FAULT);
-			}
+			} catch (SQLException e) {	}
 		} catch (AddressBookException e) {
 			throw new AddressBookException(e.getMessage(), e.type);
 		}
