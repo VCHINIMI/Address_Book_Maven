@@ -1,6 +1,7 @@
 package UC13.Address_Book_Maven_New;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,11 +13,15 @@ public class AddressBookService {
 	private AddressBookDBService addressBookDBService;
 
 	public enum IOService {
-		DB_IO
+		DB_IO, REST_IO
 	}
 
 	public AddressBookService() {
 		this.addressBookDBService = AddressBookDBService.getInstance();
+	}
+
+	public AddressBookService(List<Contact> asList) {
+		this.addressBookList = new ArrayList<>(asList);
 	}
 
 	@SuppressWarnings("static-access")
@@ -103,7 +108,7 @@ public class AddressBookService {
 
 	}
 
-	public int countEntries() {
+	public int countEntries(IOService ioService) {
 		return addressBookList.size();
 	}
 }
