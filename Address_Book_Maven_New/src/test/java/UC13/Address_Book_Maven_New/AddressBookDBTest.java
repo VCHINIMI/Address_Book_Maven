@@ -51,7 +51,7 @@ public class AddressBookDBTest {
 		List<Contact> contactList = addressBookService.getContactsByState("AP");
 		assertEquals(contactList.size(), 4);
 	}
-	
+
 // Add new Contact
 	@Test 
 	public void addNewContactAndCheckInSync() throws AddressBookException {
@@ -61,5 +61,18 @@ public class AddressBookDBTest {
 				"vchiay", "BOOK3", "FRIEND",LocalDate.now());
 		boolean res = addressBookService.checkAddressBookInSyncWithDB("Vina");
 		assertTrue(res);
+	}
+	
+//	Add multiple contacts to db using Threads
+	@Test
+	public void addMultipleContactsToDB_ByThreads() throws AddressBookException {
+		AddressBookService addressBookService = new AddressBookService(); 
+		addressBookService.readAddressBookData(IOService.DB_IO);
+		Contact[] arrayOfContacts = { new Contact(0, "sri", "modugu", "Dr.no", "vjd", "AP", 560016, 98003, "sm@gmail", "BOOK4", "FRIEND", LocalDate.of(2019, 9, 3)),
+									  new Contact(0, "naresh", "ch", "Dr.no", "kkd", "AP", 530033, 98234, "nc@gmail", "BOOK4", "FAMILY", LocalDate.of(2019, 10, 4)),
+									  new Contact(0, "jagga", "rao", "Dr.no", "kkd", "AP", 530033, 98232, "jg@gmail", "BOOK5", "FAMILY", LocalDate.of(20110, 10, 4)),
+									};
+		addressBookService.addContactArrayToDB(arrayOfContacts);
+		assertEquals(10, addressBookService.countEntries());
 	}
 }
